@@ -13,11 +13,9 @@ import SortCommunities from "../../SortPrice/SortCommunities";
 const AllCommunities = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    getAll();
-  }, [dispatch]);
-  const getAll = () => {
     dispatch(getAllCommunities());
-  };
+  }, [dispatch]);
+
   const [isCreated, setIsCreated] = useState(false);
 
   const communities = useSelector(
@@ -38,14 +36,19 @@ const AllCommunities = () => {
   };
 
   /////////////////////////
-  const userId = useSelector((state) => state.auth.authUser);
-
+  const user = useSelector((state) => state.auth.authUser);
+console.log(user._id, 132);
   const findRequest = communities.filter((com) =>
-    com.requests.find((requst) => requst._id === userId._id)
+    com.requests.find((requst) => requst._id === user._id)
+  );
+  console.log(findRequest, 11);
+
+  const findMember = communities.filter((com) =>
+    com.members.find((member) => member._id === user._id)
   );
 
   const requestsHandler = (id) => {
-    dispatch(leaveRequest({ id, userId, callback: getAll }));
+    dispatch(leaveRequest({ id, user, getAllCommunities }));
   };
 
   const handleTransition = () => {
@@ -77,6 +80,7 @@ const AllCommunities = () => {
         {value
           ? filteredTasks.map((elem) => {
               return (
+                
                 <div key={elem._id} className={styles.community}>
                   <div className={styles.emblem}>
                     <img
@@ -84,18 +88,19 @@ const AllCommunities = () => {
                       alt=""
                     />
                   </div>
+                  
                   <div className={styles.name}>{elem.name}</div>
                   <div className={styles.members}>
                     Участников: {elem.members.length}
+                    
                   </div>
                   <div className={styles.btn}>
                     <div>
                       <Link to={`/communities/${elem._id}`}>Перейти</Link>
                     </div>
                     <div>
-                      {userId._id !== elem.founder._id ? (
+                    {user._id !== elem.founder._id && !elem.members.find(el=>el._id.toString()===user._id.toString()) && (
                         <button
-                          // disabled={elem.requests._id === userId._id}
                           disabled={findRequest.find(
                             (item) => item._id === elem._id
                           )}
@@ -103,8 +108,6 @@ const AllCommunities = () => {
                         >
                           Вступить{" "}
                         </button>
-                      ) : (
-                        ""
                       )}
                     </div>
                   </div>
@@ -134,9 +137,8 @@ const AllCommunities = () => {
                       </Link>
                     </div>
                     <div>
-                      {userId._id !== elem.founder._id ? (
+                      {user._id !== elem.founder._id && !elem.members.find(el=>el._id.toString()===user._id.toString()) && (
                         <button
-                          // disabled={elem.requests._id === userId._id}
                           disabled={findRequest.find(
                             (item) => item._id === elem._id
                           )}
@@ -144,8 +146,6 @@ const AllCommunities = () => {
                         >
                           Вступить{" "}
                         </button>
-                      ) : (
-                        ""
                       )}
                     </div>
                   </div>

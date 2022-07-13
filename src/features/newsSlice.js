@@ -53,7 +53,7 @@ export const addNews = createAsyncThunk(
           Authorization: `Bearer ${state.auth.token}`,
         },
       });
-      data.callback();
+      thunkAPI.dispatch(getAllNews());
       return await res.json();
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
@@ -63,7 +63,7 @@ export const addNews = createAsyncThunk(
 
 export const addLikes = createAsyncThunk(
   "news/addLikes",
-  async ({ userId, news, callback }, thunkAPI) => {
+  async ({ userId, news, getNews }, thunkAPI) => {
     try {
       const state = thunkAPI.getState();
       const res = await fetch(`http://localhost:3042/news/likes/${news._id}`, {
@@ -74,7 +74,7 @@ export const addLikes = createAsyncThunk(
         },
         body: JSON.stringify({ likes: userId }),
       });
-      callback();
+      thunkAPI.dispatch(getNews());
       return await res.json();
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
@@ -84,7 +84,7 @@ export const addLikes = createAsyncThunk(
 
 export const deleteLikes = createAsyncThunk(
   "news/deleteLikes",
-  async ({ userId, news, callback }, thunkAPI) => {
+  async ({ userId, news, getNews }, thunkAPI) => {
     try {
       const state = thunkAPI.getState();
       const res = await fetch(
@@ -98,7 +98,7 @@ export const deleteLikes = createAsyncThunk(
           body: JSON.stringify({ likes: userId._id }),
         }
       );
-      callback();
+      thunkAPI.dispatch(getNews());
 
       const allNews = await res.json();
 
@@ -113,12 +113,12 @@ export const deleteLikes = createAsyncThunk(
 );
 export const deleteNews = createAsyncThunk(
   "news/deleteNews",
-  async ({id, callback }, thunkAPI) => {
+  async ({id, getNews }, thunkAPI) => {
     try {
       const res = await fetch(`http://localhost:3042/news/${id}`, {
         method: "DELETE",
       });
-      callback()
+      thunkAPI.dispatch(getNews())
       return id;
     } catch (e) {
       return thunkAPI.rejectWithValue(e);

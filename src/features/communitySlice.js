@@ -40,7 +40,7 @@ export const addCommunity = createAsyncThunk(
         },
         // с бэка эмблема пустая, по дефолту стоит эмблема
       });
-      data.callback();
+      thunkAPI.dispatch(data.getAllCommunities())
       return await res.json();
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
@@ -64,7 +64,7 @@ export const getAllCommunities = createAsyncThunk(
 
 export const leaveRequest = createAsyncThunk(
   "communities/leaveRequest",
-  async ({ id, userId, callback }, thunkAPI) => {
+  async ({ id, user, getAllCommunities }, thunkAPI) => {
     try {
       const state = thunkAPI.getState();
       const res = await fetch(
@@ -75,10 +75,10 @@ export const leaveRequest = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${state.auth.token}`,
           },
-          body: JSON.stringify({ requests: userId }),
+          body: JSON.stringify({ requests: user }),
         }
       );
-      callback();
+      thunkAPI.dispatch(getAllCommunities());
       return await res.json();
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
