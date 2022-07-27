@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {useNavigate, useParams } from "react-router-dom";
 import { getAllNews } from "../../../features/newsSlice";
 import {
-  addRating,
   deleteCommunity,
-  editCommunity,
   editEmblem,
   getCommunityById,
 } from "../../../features/communitySlice";

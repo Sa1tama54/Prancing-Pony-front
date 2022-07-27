@@ -14,11 +14,8 @@ const CreateCommunity = ({ setIsCreated }) => {
   const [emblem, setEmblem] = useState("");
   const [description, setDescription] = useState("");
 
-  const communitiesAllFunction = () => {
-    dispatch(getAllCommunities());
-  };
   useEffect(() => {
-    communitiesAllFunction();
+    dispatch(getAllCommunities());
   }, [dispatch]);
 
   const submitHandler = (e) => {
@@ -28,7 +25,7 @@ const CreateCommunity = ({ setIsCreated }) => {
         name,
         description,
         emblem,
-        callback: communitiesAllFunction,
+        getAllCommunities,
       })
     );
     setName("");

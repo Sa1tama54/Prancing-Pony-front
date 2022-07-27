@@ -7,12 +7,12 @@ const News = ({ news, idNews, userId, communityFounderId, getNews }) => {
   const dispatch = useDispatch();
 
   const deleteNewsHandler = (id) => {
-    dispatch(deleteNews({ id, callback: getNews }));
+    dispatch(deleteNews({ id, getNews }));
   };
   const likesHandler = (arr) => {
     arr.find((elem) => elem === userId._id)
-      ? dispatch(deleteLikes({ userId, news, callback: getNews }))
-      : dispatch(addLikes({ userId, news, callback: getNews }));
+      ? dispatch(deleteLikes({ userId, news,  getNews }))
+      : dispatch(addLikes({ userId, news,  getNews }));
   };
 
   return (
